@@ -1,0 +1,76 @@
+# Feature Selection Pipeline for pIC50 Predictionimport pandas as pd
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+from sklearn.feature_selection import VarianceThreshold, RFE
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.impute import SimpleImputer
+from google.colab import files
+import io
+
+#  Upload and load dataset
+uploaded = files.upload()                       # Upload pd1ver2tocolab.csv
+file_path = "pd1ver2tocolab.csv"                # Specify dataset name
+data = pd.read_csv(io.BytesIO(uploaded[file_path]))
+
+target_column = "pIC50"
+data = data.dropna(subset=[target_column])
+y = data[target_column].astype(float)
+
+# Select numeric features only
+X_all = data.drop(columns=[target_column])
+numeric_cols = X_all.select_dtypes(include=[np.number]).columns.tolist()
+X = X_all[numeric_cols].copy()
+
+# Median imputation for missing values
+imputer = SimpleImputer(strategy="median")
+X_imp = pd.DataFrame(imputer.fit_transform(X), columns=X.columns, index=X.index)
+
+#  Remove low-variance features
+selector = VarianceThreshold(threshold=0.1)
+X_high_var = pd.DataFrame(selector.fit_transform(X_imp),
+                          columns=X_imp.columns[selector.get_support()],
+                          index=X_imp.index)
+
+#  Remove highly correlated features (|r| > 0.7)
+corr_matrix = X_high_var.corr().abs()
+upper = corr_matrix.where(np.triu(np.ones(corr_matrix.shape), k=1).astype(bool))
+to_drop = [col for col in upper.columns if any(upper[col] > 0.7)]
+X_uncorrelated = X_high_var.drop(columns=to_drop)
+
+#  Select features correlated with target (|r| > 0.1)
+corr_with_target = X_uncorrelated.corrwith(y)
+selected_features = corr_with_target[corr_with_target.abs() > 0.1].index.tolist()
+if len(selected_features) == 0:
+    k = min(12, X_uncorrelated.shape[1])
+    selected_features = corr_with_target.abs().sort_values(ascending=False).head(k).index.tolist()
+X_selected = X_uncorrelated[selected_features]
+
+# Correlation heatmap
+if X_selected.shape[1] >= 2:
+    plt.figure(figsize=(min(12, 0.8*X_selected.shape[1]+4), 10))
+    sns.heatmap(X_selected.corr(), annot=False, cmap="coolwarm")
+    plt.title("Pearson Correlation Heatmap of Selected Features")
+    plt.tight_layout()
+    plt.show()
+
+#  Bar plot of feature–target correlations
+corr_with_target_filtered = corr_with_target[selected_features].sort_values(ascending=False)
+plt.figure(figsize=(max(10, 0.6*len(corr_with_target_filtered)), 6))
+sns.barplot(x=corr_with_target_filtered.index, y=corr_with_target_filtered.values)
+plt.xticks(rotation=90)
+plt.ylabel("Pearson Correlation with pIC50")
+plt.title("Correlation of Selected Features with Target (pIC50)")
+plt.tight_layout()
+plt.show()
+
+# Recursive Feature Elimination (RFE) using Random Forest
+if X_selected.shape[1] > 0:
+    rf = RandomForestRegressor(n_estimators=100, random_state=42, n_jobs=-1)
+    n_features_to_select = min(12, X_selected.shape[1])
+    rfe = RFE(estimator=rf, n_features_to_select=n_features_to_select)
+    rfe.fit(X_selected, y)
+    X_final = X_selected[X_selected.columns[rfe.support_]]
+    X_final.to_csv("selected_features.csv", index=False)
+    print("Final selected features:", list(X_final.columns))
+	
