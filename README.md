@@ -17,21 +17,23 @@ Supporting Information.docx
 
 Detailed description of data curation, feature selection, model development, and validation workflows
 
-KNIME workflow diagrams (Figures S1–S11) illustrating each step of the machine-learning pipeline
+KNIME workflow diagrams illustrating each step of the machine-learning pipeline
 
 ## Curated Datasets
 
-ChEMBL_curated_dataset.xlsx
+ChEMBL_curated_dataset (csv file)
 
 Curated PD-L1 bioactivity dataset derived from the ChEMBL database
 
-PDL1_Data_trainingset.xlsx
+PDL1_Data_trainingset (csv file)
 
-PDL1_Data_testset.xlsx
+PDL1_Data_testset (csv file)
 
-PDL1_Data_externalvalidationset.xlsx
+PDL1_Data_externalvalidationset (csv file)
 
 External validation dataset used to assess model generalization
 
-BindingDB_application_dataset_predicted.xlsx
+BindingDB_application_dataset_predicted (csv file)
+
+## Source code for Feature selection and SHAP analysis using Google colab
 
