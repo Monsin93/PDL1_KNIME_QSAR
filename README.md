@@ -13,11 +13,9 @@ The repository contains the following files:
 
 ## Supporting Information
 
-Supporting Information.docx
-
 Detailed description of data curation, feature selection, model development, and validation workflows
 
-KNIME workflow diagrams illustrating each step of the machine-learning pipeline
+KNIME workflow diagrams illustrating each step of the machine-learning pipeline were provided in Supplementary Docx file
 
 ## Curated Datasets
 
@@ -36,4 +34,5 @@ External validation dataset used to assess model generalization
 BindingDB_application_dataset_predicted (csv file)
 
 ## Source code for Feature selection and SHAP analysis using Google colab
+
 
