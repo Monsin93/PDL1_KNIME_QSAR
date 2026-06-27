@@ -52,9 +52,10 @@ development.
 
 1. Requires KNIME Analytics Platform v5.2.1 (or later) with the RDKit KNIME
    extension installed.
-2. The input node reads the dataset via a path relative to the workflow; keep
-   `data/Data_CHEMBL15504.csv` in place and the workflow will locate it
-   automatically — no local path editing is required.
+2. The input node reads the raw dataset
+   (`1. ChEMBLdatasetretrivedfromdatabase.csv`) via a path relative to the
+   workflow; keep the file in place and the workflow will locate it
+   automatically.
 3. Reset and execute the workflow to reproduce the train/test/external-validation
    splits and the Random Forest model.
 
