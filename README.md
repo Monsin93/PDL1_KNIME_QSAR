@@ -13,18 +13,22 @@ Information.
 
 ## Repository contents
 
-- `workflow/` — Executable KNIME workflow (.knwf) for the selected model
+- `PDL1_RFHybrid_github.knwf` — Executable KNIME workflow for the selected model
   (Random Forest with hybrid MACCS + Morgan fingerprints), covering data input,
   outlier removal, fingerprint generation, train/test/external-validation
   splitting, and model training and evaluation.
-- `data/Data_CHEMBL15504.csv` — Frozen snapshot of the raw ChEMBL query output
-  (see Data provenance below).
-- `data/ChEMBL_curated_dataset.csv` — Curated PD-L1 bioactivity dataset
-  (final modeling set).
-- `data/PDL1_Data_trainingset.csv`,
-  `data/PDL1_Data_testset.csv`,
-  `data/PDL1_Data_externalvalidationset.csv` — Train/test/external-validation
+- `1. ChEMBLdatasetretrivedfromdatabase.csv` — Frozen snapshot of the raw ChEMBL
+  query output, 15,504 records (see Data provenance below).
+- `2. ChEMBL_curated_dataset.csv` — Curated PD-L1 bioactivity dataset
+  (final modeling set, 2,413 compounds).
+- `3. PDL1_Data_trainingset.csv`,
+  `4. PDL1_Data_testset.csv`,
+  `5. PDL1_Data_externalvalidationset.csv` — Train/test/external-validation
   splits used in the study.
+- `6. BindingDB_application_dataset_predictedvalues.csv` — Independent BindingDB
+  application set with predicted values (cross-database analysis).
+- `FeturesSelectionandSHAP_analysis.ipynb` and `ForRunFeatureSelection_colab/` —
+  Python/Colab notebooks for feature selection and SHAP analysis.
 - Supporting Information (KNIME workflow diagrams for each pipeline step) is
   provided in the Supplementary file accompanying the manuscript.
 
